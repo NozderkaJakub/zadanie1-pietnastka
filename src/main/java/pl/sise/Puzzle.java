@@ -80,7 +80,7 @@ public class Puzzle {
 
     public ArrayList<String> showPossibleMoves() {
         ArrayList<String> moves = new ArrayList<String>();
-        int x=0, y=0;
+        int x, y=0;
         for (ArrayList<Integer> row : this.puzzle) {
             if (row.contains(0)) {
                 y = this.puzzle.indexOf(row);
