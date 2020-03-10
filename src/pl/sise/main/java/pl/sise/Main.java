@@ -1,4 +1,4 @@
-package com.company;
+package pl.sise;
 
 import java.io.File;
 import java.io.FileNotFoundException;
