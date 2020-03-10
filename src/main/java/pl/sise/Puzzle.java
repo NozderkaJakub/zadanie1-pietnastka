@@ -3,12 +3,14 @@ package main.java.pl.sise;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Scanner;
 
 public class Puzzle {
     int dimX;
     int dimY;
     ArrayList<ArrayList<Integer>> puzzle, puzzleModel;
+    ArrayList<String> order = new ArrayList<>(Arrays.asList("L", "R", "U", "D"));
 
     public Puzzle(String starting_file) throws FileNotFoundException {
         this.readData(starting_file);
@@ -29,7 +31,7 @@ public class Puzzle {
             }
         }
         System.out.println(this.puzzle);
-        System.out.println(calculateFullCostOfPuzzle());
+        System.out.println(this.showPossibleMoves().toString());
     }
 
     private int calculateCost(int x, int y, int number) {
@@ -71,4 +73,34 @@ public class Puzzle {
             }
         }
     }
+
+    public boolean isSolved() {
+        return this.puzzle.equals(this.puzzleModel);
+    }
+
+    public ArrayList<String> showPossibleMoves() {
+        ArrayList<String> moves = new ArrayList<String>();
+        int x=0, y=0;
+        for (ArrayList<Integer> row : this.puzzle) {
+            if (row.contains(0)) {
+                y = this.puzzle.indexOf(row);
+            }
+        }
+        x = this.puzzle.get(y).indexOf(0);
+
+        if (x >= 0 && x < dimX-1) {
+            moves.add("R");
+        }
+        if (x > 0 && x <= dimX-1) {
+            moves.add("L");
+        }
+        if (y >= 0 && y < dimY-1) {
+            moves.add("D");
+        }
+        if (y > 0 && x <= dimY-1) {
+            moves.add("U");
+        }
+        return moves;
+    }
+
 }
