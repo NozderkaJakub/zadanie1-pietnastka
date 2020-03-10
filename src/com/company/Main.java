@@ -9,7 +9,6 @@ public class Main {
     static String starting_file = "4.txt";
     static String ending_file = "rozwiazanie.txt";
     static String additional_file = "informacje_dodatkowe.txt";
-    static int dimX, dimY;
     static ArrayList<ArrayList<Integer>> puzzle, puzzleModel;
 
     public static void main(String[] args) throws FileNotFoundException {
