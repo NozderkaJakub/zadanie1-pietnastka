@@ -1,4 +1,4 @@
-package main.java.pl.sise;
+package pl.sise;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -10,11 +10,21 @@ import java.util.Scanner;
 public class Puzzle {
     int dimX;
     int dimY;
-    ArrayList<ArrayList<Integer>> puzzle, puzzleModel;
+    ArrayList<ArrayList<Integer>> puzzleMatrix;
     ArrayList<String> order = new ArrayList<>(Arrays.asList("L", "R", "U", "D"));
 
     public Puzzle(String starting_file) throws FileNotFoundException {
         this.readData(starting_file);
+    }
+
+    public Puzzle(ArrayList<ArrayList<Integer>> puzzleMatrix) {
+        this.puzzleMatrix = puzzleMatrix;
+        dimX = puzzleMatrix.get(0).size();
+        dimY = puzzleMatrix.size();
+    }
+
+    public ArrayList<ArrayList<Integer>> getMatrix() {
+        return puzzleMatrix;
     }
 
     public void readData(String starting_file) throws FileNotFoundException {
@@ -22,32 +32,39 @@ public class Puzzle {
         String[] dims = fileRead.nextLine().split(" ");
         this.dimX = Integer.parseInt(dims[0]);
         this.dimY = Integer.parseInt(dims[1]);
-        makePuzzleModel();
-        this.puzzle = new ArrayList<>();
+        this.puzzleMatrix = new ArrayList<>();
         for (int i = 0; i < this.dimY; i++){
             String[] line = fileRead.nextLine().split(" ");
-            this.puzzle.add(new ArrayList<>());
+            this.puzzleMatrix.add(new ArrayList<>());
             for (int j = 0; j < this.dimX; j++) {
-                this.puzzle.get(i).add(Integer.parseInt(line[j]));
+                this.puzzleMatrix.get(i).add(Integer.parseInt(line[j]));
             }
         }
-        this.showFormattedPuzzle(this.puzzle);
-        System.out.println(this.showPossibleMoves(this.puzzle).toString());
+     //   this.showFormattedPuzzle(this.puzzle);
+     //   System.out.println(this.showPossibleMoves().toString());
 //        System.out.println("original");
 //        this.showFormattedPuzzle(this.puzzle);
     }
 
-    private int calculateCost(int x, int y, int number) {
-        int i = 0;
-        int j;
-        for (ArrayList<Integer> row : this.puzzleModel) {
-            if (row.contains(number)) {
-                i = this.puzzleModel.indexOf(row);
-            }
-        }
-        j = this.puzzleModel.get(i).indexOf(number);
-        return Math.abs(i - y) + Math.abs(j - x);
+    public int getDimX() {
+        return dimX;
     }
+
+    public int getDimY() {
+        return dimY;
+    }
+
+    // private int calculateCost(int x, int y, int number) {
+    //     int i = 0;
+    //     int j;
+    //     for (ArrayList<Integer> row : this.puzzleModel) {
+    //         if (row.contains(number)) {
+    //             i = this.puzzleModel.indexOf(row);
+    //         }
+    //     }
+    //     j = this.puzzleModel.get(i).indexOf(number);
+    //     return Math.abs(i - y) + Math.abs(j - x);
+    // }
 
     public ArrayList<Integer> locateNumber(ArrayList<ArrayList<Integer>> puzzle, int number) {
         ArrayList<Integer> localization = new ArrayList<>();
@@ -63,100 +80,77 @@ public class Puzzle {
         return localization;
     }
 
-    public void showFormattedPuzzle(ArrayList<ArrayList<Integer>> puzzle) {
-        for (ArrayList<Integer> row : puzzle) {
+    public void showFormattedPuzzle() {
+        for (ArrayList<Integer> row : puzzleMatrix) {
             System.out.println(row);
         }
         System.out.println('\n');
     }
 
-    public int calculateFullCostOfPuzzle(ArrayList<ArrayList<Integer>> puzzle) {
-        int fullCost = 0;
-        for (int i = 0; i < this.dimY; i++) {
-            for (int j = 0; j < this.dimX; j++) {
-                if (puzzle.get(i).get(j) != 0) {
-                    fullCost += calculateCost(j, i, puzzle.get(i).get(j));
-                }
-            }
-        }
-        return fullCost;
-    }
+    // public int calculateFullCostOfPuzzle(ArrayList<ArrayList<Integer>> puzzle) {
+    //     int fullCost = 0;
+    //     for (int i = 0; i < this.dimY; i++) {
+    //         for (int j = 0; j < this.dimX; j++) {
+    //             if (puzzle.get(i).get(j) != 0) {
+    //                 fullCost += calculateCost(j, i, puzzle.get(i).get(j));
+    //             }
+    //         }
+    //     }
+    //     return fullCost;
+    // }
 
-    private void makePuzzleModel() { //Tworzy model ułożonych puzzli o rozmiarach odpowiadajacych grze do ułożenia
+    protected static  ArrayList<ArrayList<Integer>> makePuzzleModel(int dimX, int dimY) { //Tworzy model ułożonych puzzli o rozmiarach odpowiadajacych grze do ułożenia
         int number = 1;
-        this.puzzleModel = new ArrayList<>();
-        for (int i = 0; i < this.dimY; i++) {
-            this.puzzleModel.add(new ArrayList<>());
-            for (int j = 0; j < this.dimX; j++) {
-                if (number <= this.dimX * this.dimY -1) {
-                    this.puzzleModel.get(i).add(number);
+        ArrayList<ArrayList<Integer>> puzzleModel = new  ArrayList<ArrayList<Integer>>();
+        for (int i = 0; i < dimY; i++) {
+            puzzleModel.add(new ArrayList<>());
+            for (int j = 0; j < dimX; j++) {
+                if (number <= dimX * dimY -1) {
+                    puzzleModel.get(i).add(number);
                     number++;
                 } else {
-                    this.puzzleModel.get(i).add(0);
+                    puzzleModel.get(i).add(0);
                 }
             }
         }
+        return puzzleModel;
     }
 
-    public boolean isSolved(ArrayList<ArrayList<Integer>> puzzle) {
-        return puzzle.equals(this.puzzleModel);
-    }
-
-//    public void makeMove(ArrayList<ArrayList<Integer>> originalPuzzle) {
-//        ArrayList<ArrayList<Integer>> puzzle = makeCopyOfPuzzle(originalPuzzle);
-//        ArrayList<Integer> coords = this.locateNumber(puzzle, 0);
-//        for (String move : this.showPossibleMoves(puzzle)) {
-//            if (move == "R") {
-//                this.swap(puzzle, coords.get(0), coords.get(1), coords.get(0) + 1, coords.get(1));
-//            } else if (move == "L") {
-//                this.swap(puzzle, coords.get(0), coords.get(1), coords.get(0) - 1, coords.get(1));
-//            } else if (move == "U") {
-//                this.swap(puzzle, coords.get(0), coords.get(1), coords.get(0), coords.get(1) - 1);
-//            } else if (move == "D") {
-//                this.swap(puzzle, coords.get(0), coords.get(1), coords.get(0), coords.get(1) + 1);
-//            }
-//            System.out.println("original");
-//            this.showFormattedPuzzle(this.puzzle);
-//            System.out.println("not original");
-//            this.showFormattedPuzzle(puzzle);
-//            puzzle = makeCopyOfPuzzle(originalPuzzle);
-//        }
-//    }
-
-    public ArrayList<ArrayList<Integer>> makeMove(ArrayList<ArrayList<Integer>> originalPuzzle, String move) {
-        ArrayList<ArrayList<Integer>> puzzle = makeCopyOfPuzzle(originalPuzzle);
-        ArrayList<Integer> coords = this.locateNumber(puzzle, 0);
+    public static Puzzle makeMove(Puzzle originalPuzzle, String move) {
+        Puzzle puzzle = makeCopyOfPuzzle(originalPuzzle);
+        ArrayList<Integer> coords = puzzle.locateNumber(puzzle.getMatrix(), 0);
+        //System.out.println(coords.toString());
         if (move == "R") {
-            this.swap(puzzle, coords.get(0), coords.get(1), coords.get(0) + 1, coords.get(1));
+            puzzle.swap(coords.get(0), coords.get(1), coords.get(0) + 1, coords.get(1));
         } else if (move == "L") {
-            this.swap(puzzle, coords.get(0), coords.get(1), coords.get(0) - 1, coords.get(1));
+            puzzle.swap(coords.get(0), coords.get(1), coords.get(0) - 1, coords.get(1));
         } else if (move == "U") {
-            this.swap(puzzle, coords.get(0), coords.get(1), coords.get(0), coords.get(1) - 1);
+            puzzle.swap(coords.get(0), coords.get(1), coords.get(0), coords.get(1) - 1);
         } else if (move == "D") {
-            this.swap(puzzle, coords.get(0), coords.get(1), coords.get(0), coords.get(1) + 1);
+            puzzle.swap(coords.get(0), coords.get(1), coords.get(0), coords.get(1) + 1);
         }
-        puzzle = makeCopyOfPuzzle(originalPuzzle);
+       // puzzle = makeCopyOfPuzzle(originalPuzzle);
         return puzzle;
     }
 
-    public ArrayList<ArrayList<Integer>> makeCopyOfPuzzle(ArrayList<ArrayList<Integer>> originalPuzzle) {
+    public static Puzzle makeCopyOfPuzzle(Puzzle originalPuzzle) {
         ArrayList<ArrayList<Integer>> puzzle = new ArrayList<>();
-        for (ArrayList<Integer> row : originalPuzzle) {
+        for (ArrayList<Integer> row : originalPuzzle.puzzleMatrix) {
             puzzle.add((ArrayList<Integer>) row.clone());
         }
-        return puzzle;
+        return new Puzzle(puzzle);
     }
 
-    public void swap(ArrayList<ArrayList<Integer>> originalPuzzle, int x1, int y1, int x2, int y2) {
-        ArrayList<ArrayList<Integer>> puzzle = new ArrayList<>(originalPuzzle);
-        int tmp = puzzle.get(y1).get(x1);
-        puzzle.get(y1).set(x1, puzzle.get(y2).get(x2));
-        puzzle.get(y2).set(x2, tmp);
+    public void swap(int x1, int y1, int x2, int y2) {
+       // ArrayList<ArrayList<Integer>> puzzle = new ArrayList<>(originalPuzzle);
+        int tmp = puzzleMatrix.get(y1).get(x1);
+        puzzleMatrix.get(y1).set(x1, puzzleMatrix.get(y2).get(x2));
+        puzzleMatrix.get(y2).set(x2, tmp);
     }
 
-    public ArrayList<String> showPossibleMoves(ArrayList<ArrayList<Integer>> puzzle) {
+    public ArrayList<String> showPossibleMoves() {
         ArrayList<String> moves = new ArrayList<>();
-        ArrayList<Integer> coords = locateNumber(puzzle, 0);
+        ArrayList<Integer> coords = locateNumber(puzzleMatrix, 0);
 
         if (coords.get(0) >= 0 && coords.get(0) < dimX-1) {
             moves.add("R");

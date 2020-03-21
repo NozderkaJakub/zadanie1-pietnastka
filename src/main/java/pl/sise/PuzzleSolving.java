@@ -1,4 +1,4 @@
-package main.java.pl.sise;
+package pl.sise;
 
 public class PuzzleSolving {
 

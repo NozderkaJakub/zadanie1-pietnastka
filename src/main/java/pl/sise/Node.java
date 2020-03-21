@@ -1,19 +1,17 @@
-package main.java.pl.sise.tree;
+package pl.sise;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Node<T> {
     T label;
-    ArrayList<Node<T>> children;
+    List<Node<T>> children;
     Node<T> parent;
-
-    public Node() {
-
-    }
 
     public Node(T label, Node<T> parent) {
         this.label = label;
         this.parent = parent;
+        children = new ArrayList<Node<T>>();
     }
 
     public void addChild(T childLabel) {
@@ -24,11 +22,25 @@ public class Node<T> {
         return this.label;
     }
 
+    public boolean isRoot() {
+        if(parent == null) {
+            return true;
+        }
+        return false;
+    }
+
     public Node<T> getParent() {
         return this.parent;
     }
 
-    public ArrayList<Node<T>> getChildren() {
+    public List<Node<T>> getChildren() {
         return this.children;
+    }
+
+    public boolean hasChildren() {
+        if(children.size() > 0) {
+            return true;
+        }
+        return false;
     }
 }

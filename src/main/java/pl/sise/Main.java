@@ -1,4 +1,4 @@
-package main.java.pl.sise;
+package pl.sise;
 
 import java.io.FileNotFoundException;
 
@@ -9,5 +9,7 @@ public class Main {
 
     public static void main(String[] args) throws FileNotFoundException {
         Puzzle puzzle = new Puzzle(starting_file);
+        BFS bfs = new BFS(puzzle);
+        bfs.solvePuzzle();
     }
 }
