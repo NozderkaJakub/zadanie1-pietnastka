@@ -14,18 +14,18 @@ public class PuzzleTest {
         
     @Test
     public void testSwap() throws FileNotFoundException {
-        String starting_file = "4.txt";
-        Puzzle puzzle = new Puzzle(starting_file);
-        puzzle.showFormattedPuzzle();
-        Puzzle newPuzzle = Puzzle.makeMove(puzzle, "U");
-        newPuzzle.showFormattedPuzzle();
+//        String starting_file = "4.txt";
+//        Puzzle puzzle = new Puzzle(starting_file);
+//        puzzle.showFormattedPuzzle();
+//        Puzzle newPuzzle = Puzzle.makeMove(puzzle, "U");
+//        newPuzzle.showFormattedPuzzle();
     }
 
     @Test
     public void isSolvedTest() throws FileNotFoundException {
-        String starting_file = "4.txt";
-        Puzzle puzzle = new Puzzle(starting_file);
-       // System.out.println(puzzle.isSolved());
+//        String starting_file = "4.txt";
+//        Puzzle puzzle = new Puzzle(starting_file);
+//       // System.out.println(puzzle.isSolved());
     }
 }
     

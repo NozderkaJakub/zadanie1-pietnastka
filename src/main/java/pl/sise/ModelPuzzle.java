@@ -1,11 +1,11 @@
 package pl.sise;
 
-class ModelPuzzle extends Puzzle {
-    ModelPuzzle(int dimX, int dimY) {
-        super(Puzzle.makePuzzleModel(dimX, dimY));
-    }
+import java.io.FileNotFoundException;
 
-    public boolean isSolved(Puzzle puzzle) {
-        return this.getMatrix().equals(puzzle.getMatrix());
-    }
+class ModelPuzzle extends Puzzle {
+
+	public ModelPuzzle() throws FileNotFoundException {
+		super();
+		// TODO Auto-generated constructor stub
+	}
 }
