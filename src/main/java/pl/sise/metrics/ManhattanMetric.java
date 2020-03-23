@@ -11,9 +11,8 @@ public class ManhattanMetric {
 				int[] tile = new int[2];
 				modelTile = Puzzle.locateNumber(puzzle.getModelMatrix(), puzzle.getMatrix()[i][j]);
 				tile = puzzle.locateNumber(puzzle.getMatrix()[i][j]);
-				for (int k = 0; k < modelTile.length; k++) {
-					sum += Math.abs(modelTile[k] - tile[k]);
-				}
+				sum += Math.abs(modelTile[0] - tile[0]);
+				sum += Math.abs(modelTile[1] - tile[1]);
 			}
 		}
 		return sum;
@@ -27,9 +26,8 @@ public class ManhattanMetric {
 				int[] tile = new int[2];
 				modelTile = Puzzle.locateNumber(model, puzzle[i][j]);
 				tile = Puzzle.locateNumber(puzzle, puzzle[i][j]);
-				for (int k = 0; k < modelTile.length; k++) {
-					sum += Math.abs(modelTile[k] - tile[k]);
-				}
+				sum += Math.abs(modelTile[0] - tile[0]);
+				sum += Math.abs(modelTile[1] - tile[1]);
 			}
 		}
 		return sum;

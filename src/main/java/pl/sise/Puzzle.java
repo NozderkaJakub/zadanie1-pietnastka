@@ -29,7 +29,7 @@ public class Puzzle {
     }
 
     public Puzzle(Puzzle puzzle) {
-    	this.puzzleMatrix = new int [getDimY()][getDimX()];
+    	this.puzzleMatrix = new int [puzzle.getDimY()][puzzle.getDimX()];
         this.puzzleMatrix = makeCopyOfPuzzle(puzzle).getMatrix();
         this.order = puzzle.order;
         configure();
@@ -60,31 +60,6 @@ public class Puzzle {
     public void setOrder(ArrayList<String> order) {
     	this.order = order;
     }
-    
-
-//     public int calculateFullCostOfPuzzle(ArrayList<ArrayList<Integer>> puzzle) {
-//         int fullCost = 0;
-//         for (int i = 0; i < this.dimY; i++) {
-//             for (int j = 0; j < this.dimX; j++) {
-//                 if (puzzle.get(i).get(j) != 0) {
-//                     fullCost += calculateCost(j, i, puzzle.get(i).get(j));
-//                 }
-//             }
-//         }
-//         return fullCost;
-//     }
-
-//     private int calculateCost(int x, int y, int number) {
-//         int i = 0;
-//         int j;
-//         for (ArrayList<Integer> row : this.puzzleModel) {
-//             if (row.contains(number)) {
-//                 i = this.puzzleModel.indexOf(row);
-//             }
-//         }
-//         j = this.puzzleModel.get(i).indexOf(number);
-//         return Math.abs(i - y) + Math.abs(j - x);
-//     }
 
     protected void configure() {
         this.dimX = puzzleMatrix[0].length;

@@ -12,11 +12,13 @@ public class Main {
     public static void main(String[] args) throws FileNotFoundException {
         Puzzle puzzle = new Puzzle();
         puzzle.setOrder(new ArrayList<String>(Arrays.asList("L", "D", "R", "U")));
-        DFS dfs = new DFS(puzzle, new ArrayList<String>(Arrays.asList("L", "D", "R", "U")));
+        AStar astar = new AStar(puzzle);
         System.out.println("Przed: ");
         puzzle.showFormattedPuzzle();
-        SolvingInfo info = dfs.solvePuzzle();
-        System.out.println("Po: ");
-        System.out.println(info.getUsedAlgorithm());
+        astar.solve();
+//        DFS dfs = new DFS(puzzle, new ArrayList<String>(Arrays.asList("L", "D", "R", "U")));
+//        SolvingInfo info = dfs.solvePuzzle();
+//        System.out.println("Po: ");
+//        System.out.println(info.getUsedAlgorithm());
     }
 }
