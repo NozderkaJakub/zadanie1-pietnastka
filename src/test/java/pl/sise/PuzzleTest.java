@@ -1,7 +1,10 @@
 package pl.sise;
+
 import org.junit.Test;
 
 import java.io.FileNotFoundException;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 import org.junit.Before;    
     
@@ -14,11 +17,13 @@ public class PuzzleTest {
         
     @Test
     public void testSwap() throws FileNotFoundException {
-//        String starting_file = "4.txt";
-//        Puzzle puzzle = new Puzzle(starting_file);
-//        puzzle.showFormattedPuzzle();
-//        Puzzle newPuzzle = Puzzle.makeMove(puzzle, "U");
-//        newPuzzle.showFormattedPuzzle();
+     //  String starting_file = "4.txt";
+        Puzzle puzzle = new Puzzle();
+        ArrayList<String> order = new ArrayList<String>(Arrays.asList("L", "D", "R", "U"));
+        puzzle.setOrder(order);
+        puzzle.showFormattedPuzzle();
+        puzzle.makeMove("D");
+        puzzle.showFormattedPuzzle();
     }
 
     @Test

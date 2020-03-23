@@ -10,7 +10,8 @@ public class BFS {
 
     public BFS(Puzzle startingPuzzle, ArrayList<String> order) {
     	puzzles = new LinkedList<>();
-    	this.order = order;
+		this.order = order;
+		startingPuzzle.setOrder(order);
     	puzzles.add(startingPuzzle);
     }
     
@@ -23,9 +24,11 @@ public class BFS {
     			return puzzle;
     		}
     		for (String c : puzzle.showPossibleMoves()) {
-    			Puzzle p = new Puzzle(puzzle);
-    			p.makeMove(c);
-    			puzzles.add(p);
+				Puzzle p = new Puzzle(puzzle);
+				p.makeMove(c);
+				//p.showFormattedPuzzle();
+				puzzles.add(p);
+				//System.out.println(puzzles.size());
     		}
     		if (puzzle.path.length() - i >= 1) {
     			i++;
