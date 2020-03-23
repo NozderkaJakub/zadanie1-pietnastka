@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Main {
-    static String starting_file = "4.txt";
+    static String starting_file = "3.txt";
     static String ending_file = "rozwiazanie.txt";
     static String additional_file = "informacje_dodatkowe.txt";
 

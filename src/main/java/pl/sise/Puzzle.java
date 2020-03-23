@@ -11,9 +11,10 @@ import static pl.sise.Main.starting_file;
 public class Puzzle {
     int dimX;
     int dimY;
-    ArrayList<ArrayList<Integer>> puzzleMatrix, modelMatrix;
+    int[][] puzzleMatrix, modelMatrix;
     ArrayList<String> order;
-    HashMap<Character, Integer> xCoords;
+    int x;
+    int y;
     String path = "";
 
     public Puzzle() throws FileNotFoundException {
@@ -21,19 +22,20 @@ public class Puzzle {
         configure();
     }
 
-    public Puzzle(ArrayList<ArrayList<Integer>> puzzleMatrix, ArrayList<String> order) {
+    public Puzzle(int[][] puzzleMatrix, ArrayList<String> order) {
         this.puzzleMatrix = puzzleMatrix;
         this.order = order;
         configure();
     }
 
     public Puzzle(Puzzle puzzle) {
+    	this.puzzleMatrix = new int [getDimY()][getDimX()];
         this.puzzleMatrix = makeCopyOfPuzzle(puzzle).getMatrix();
         this.order = puzzle.order;
         configure();
     }
 
-    public Puzzle(ArrayList<ArrayList<Integer>> puzzleMatrix, Puzzle puzzle) {
+    public Puzzle(int[][] puzzleMatrix, Puzzle puzzle) {
         this.puzzleMatrix = puzzleMatrix;
         this.order = puzzle.order;
         configure();
@@ -47,11 +49,11 @@ public class Puzzle {
         return dimY;
     }
 
-    public ArrayList<ArrayList<Integer>> getMatrix() {
+    public int[][] getMatrix() {
         return puzzleMatrix;
     }
 
-    public ArrayList<ArrayList<Integer>> getModelMatrix() {
+    public int[][] getModelMatrix() {
         return modelMatrix;
     }
     
@@ -85,53 +87,58 @@ public class Puzzle {
 //     }
 
     protected void configure() {
-        this.dimX = puzzleMatrix.get(0).size();
-        this.dimY = puzzleMatrix.size();
+        this.dimX = puzzleMatrix[0].length;
+        this.dimY = puzzleMatrix.length;
         this.modelMatrix = makePuzzleModel();
-        xCoords = new HashMap<Character, Integer>();
-        xCoords.put(new Character('x'), locateNumber(0).get(0));
-        xCoords.put(new Character('y'), locateNumber(0).get(1));
+        x = locateNumber(0)[0];
+        y = locateNumber(0)[1];
     }
     
     public boolean isSolved() {
-    	return getMatrix().equals(getModelMatrix());
-    }
-
-
-    public ArrayList<Integer> locateNumber(ArrayList<ArrayList<Integer>> puzzle, int number) {
-        ArrayList<Integer> localization = new ArrayList<>();
-        int y = 0;
-
-        for (ArrayList<Integer> row : puzzle) {
-            if (row.contains(0)) {
-                y = puzzle.indexOf(row);
+        for (int i = 0; i < getMatrix().length; i++) {
+            for (int j = 0; j < getMatrix()[i].length; j++) {
+                if (getMatrix()[i][j] != getModelMatrix()[i][j]) {
+                    return false;
+                }
             }
         }
-        localization.add(puzzle.get(y).indexOf(0));
-        localization.add(y);
+        return true;
+    }
+
+    public ArrayList<Integer> locateNumber(int[][] puzzle, int number) {
+        ArrayList<Integer> localization = new ArrayList<>();
+        for (int i = 0; i < getMatrix().length; i++) {
+        	for (int j = 0; j < getMatrix()[i].length; j++) {
+        		if (puzzle[i][j] == number) {
+        			localization.add(j);
+        			localization.add(i);
+        		}
+        	}
+        }
         return localization;
     }
 
-    public ArrayList<Integer> locateNumber(int number) {
-        ArrayList<Integer> localization = new ArrayList<>();
-        int y = 0;
-
-        for (ArrayList<Integer> row : getMatrix()) {
-            if (row.contains(0)) {
-                y = getMatrix().indexOf(row);
-            }
+    public int[] locateNumber(int number) {
+        int[] localization = new int[2];
+        for (int i = 0; i < getMatrix().length; i++) {
+        	for (int j = 0; j < getMatrix()[i].length; j++) {
+        		if (puzzleMatrix[i][j] == number) {
+        			localization[0] = j;
+        			localization[1] = i;
+        		}
+        	}
         }
-        localization.add(getMatrix().get(y).indexOf(0));
-        localization.add(y);
         return localization;
     }
 
-    @SuppressWarnings("unchecked")
 	public Puzzle makeCopyOfPuzzle(Puzzle originalPuzzle) {
-        ArrayList<ArrayList<Integer>> puzzle = new ArrayList<>();
-        for (ArrayList<Integer> row : originalPuzzle.puzzleMatrix) {
-            puzzle.add((ArrayList<Integer>) row.clone());
+        int[][] puzzle = new int[originalPuzzle.getDimY()][originalPuzzle.getDimX()];
+        for (int i = 0; i < puzzle.length; i++) {
+        	for (int j = 0; j < puzzle[i].length; j++) {
+        		puzzle[i][j] = originalPuzzle.puzzleMatrix[i][j];
+        	}
         }
+//        showFormattedPuzzle(puzzle);
         return new Puzzle(puzzle, this);
     }
 
@@ -154,28 +161,27 @@ public class Puzzle {
 
     public void makeMove(String move) {
         if (move == "R") {
-            swap(xCoords.get('x'), xCoords.get('y'), xCoords.get('x') + 1, xCoords.get('y'));
+            swap(x, y, x + 1, y);
         } else if (move == "L") {
-        	swap(xCoords.get('x'), xCoords.get('y'), xCoords.get('x') - 1, xCoords.get('y'));
+        	swap(x, y, x - 1, y);
         } else if (move == "U") {
-        	swap(xCoords.get('x'), xCoords.get('y'), xCoords.get('x'), xCoords.get('y') - 1);
+        	swap(x, y, x, y - 1);
         } else if (move == "D") {
-        	swap(xCoords.get('x'), xCoords.get('y'), xCoords.get('x'), xCoords.get('y') + 1);
+        	swap(x, y, x, y + 1);
         }
         this.path += move;
     }
 
-    protected ArrayList<ArrayList<Integer>> makePuzzleModel() {
+    protected int[][] makePuzzleModel() {
         int number = 1;
-        ArrayList<ArrayList<Integer>> puzzleModel = new  ArrayList<ArrayList<Integer>>();
+        int[][] puzzleModel = new int[getDimY()][getDimX()];
         for (int i = 0; i < getDimY(); i++) {
-            puzzleModel.add(new ArrayList<>());
             for (int j = 0; j < getDimX(); j++) {
-                if (number <= getDimX() * getDimY() -1) {
-                    puzzleModel.get(i).add(number);
+                if (number <= getDimX() * getDimY() - 1) {
+                    puzzleModel[i][j] = number;
                     number++;
                 } else {
-                    puzzleModel.get(i).add(0);
+                    puzzleModel[i][j] = 0;
                 }
             }
         }
@@ -187,22 +193,34 @@ public class Puzzle {
         String[] dims = fileRead.nextLine().split(" ");
         this.dimX = Integer.parseInt(dims[0]);
         this.dimY = Integer.parseInt(dims[1]);
-        this.puzzleMatrix = new ArrayList<>();
+        this.puzzleMatrix = new int[getDimY()][getDimX()];
         for (int i = 0; i < this.dimY; i++){
             String[] line = fileRead.nextLine().split(" ");
-            this.puzzleMatrix.add(new ArrayList<>());
             for (int j = 0; j < this.dimX; j++) {
-                this.puzzleMatrix.get(i).add(Integer.parseInt(line[j]));
+                this.puzzleMatrix[i][j] = Integer.parseInt(line[j]);
             }
         }
         fileRead.close();
     }
 
     public void showFormattedPuzzle() {
-        for (ArrayList<Integer> row : puzzleMatrix) {
-            System.out.println(row);
+    	for (int i = 0; i < getMatrix().length; i++) {
+        	for (int j = 0; j < getMatrix()[i].length; j++) {
+                System.out.print(getMatrix()[i][j] + " ");
+        	}
+        	System.out.print('\n');
         }
-        System.out.println('\n');
+    	System.out.print("\n\n");
+    }
+
+    public void showFormattedPuzzle(int[][] puzzle) {
+    	for (int i = 0; i < puzzle.length; i++) {
+        	for (int j = 0; j < puzzle[i].length; j++) {
+                System.out.print(puzzle[i][j] + " ");
+        	}
+        	System.out.print('\n');
+        }
+    	System.out.print("\n\n");
     }
 
     public ArrayList<String> showPossibleMoves() {
@@ -226,10 +244,9 @@ public class Puzzle {
     }
 
     public void swap(int x1, int y1, int x2, int y2) {
-       // ArrayList<ArrayList<Integer>> puzzle = new ArrayList<>(originalPuzzle);
-        int tmp = puzzleMatrix.get(y1).get(x1);
-        puzzleMatrix.get(y1).set(x1, puzzleMatrix.get(y2).get(x2));
-        puzzleMatrix.get(y2).set(x2, tmp);
+        int tmp = puzzleMatrix[y1][x1];
+        puzzleMatrix[y1][x1] = puzzleMatrix[y2][x2];
+        puzzleMatrix[y2][x2] = tmp;
     }
 
 }
