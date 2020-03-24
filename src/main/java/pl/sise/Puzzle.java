@@ -3,7 +3,9 @@ package pl.sise;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.Scanner;
 
 import static pl.sise.Main.starting_file;
@@ -29,6 +31,8 @@ public class Puzzle {
     }
 
     public Puzzle(Puzzle puzzle) {
+        this.dimX = puzzle.getDimX();
+        this.dimY = puzzle.getDimY();
     	this.puzzleMatrix = new int [getDimY()][getDimX()];
         this.puzzleMatrix = makeCopyOfPuzzle(puzzle).getMatrix();
         this.order = puzzle.order;
@@ -248,5 +252,23 @@ public class Puzzle {
         puzzleMatrix[y1][x1] = puzzleMatrix[y2][x2];
         puzzleMatrix[y2][x2] = tmp;
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (o == this)
+            return true;
+        if (!(o instanceof Puzzle)) {
+            return false;
+        }
+        Puzzle puzzle = (Puzzle) o;
+        return dimX == puzzle.dimX && dimY == puzzle.dimY && Objects.equals(puzzleMatrix, puzzle.puzzleMatrix);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.deepHashCode(puzzleMatrix);
+    }
+
 
 }

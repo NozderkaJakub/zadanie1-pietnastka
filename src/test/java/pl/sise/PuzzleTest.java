@@ -17,13 +17,12 @@ public class PuzzleTest {
         
     @Test
     public void testSwap() throws FileNotFoundException {
-     //  String starting_file = "4.txt";
-        Puzzle puzzle = new Puzzle();
-        ArrayList<String> order = new ArrayList<String>(Arrays.asList("L", "D", "R", "U"));
-        puzzle.setOrder(order);
-        puzzle.showFormattedPuzzle();
-        puzzle.makeMove("D");
-        puzzle.showFormattedPuzzle();
+      //String starting_file = "4.txt";
+        // Puzzle puzzle = new Puzzle();
+        // ArrayList<String> order = new ArrayList<String>(Arrays.asList("R", "L", "D", "U"));
+        // puzzle.setOrder(order);
+        // puzzle.showFormattedPuzzle();  
+        // System.out.println(puzzle.showPossibleMoves());
     }
 
     @Test
