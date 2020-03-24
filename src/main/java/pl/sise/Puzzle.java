@@ -31,9 +31,13 @@ public class Puzzle {
     }
 
     public Puzzle(Puzzle puzzle) {
+<<<<<<< HEAD
         this.dimX = puzzle.getDimX();
         this.dimY = puzzle.getDimY();
     	this.puzzleMatrix = new int [getDimY()][getDimX()];
+=======
+    	this.puzzleMatrix = new int [puzzle.getDimY()][puzzle.getDimX()];
+>>>>>>> d0c01ba9ad9be27f2d4ce12ed7cb52e99b98bda1
         this.puzzleMatrix = makeCopyOfPuzzle(puzzle).getMatrix();
         this.order = puzzle.order;
         configure();
@@ -64,31 +68,6 @@ public class Puzzle {
     public void setOrder(ArrayList<String> order) {
     	this.order = order;
     }
-    
-
-//     public int calculateFullCostOfPuzzle(ArrayList<ArrayList<Integer>> puzzle) {
-//         int fullCost = 0;
-//         for (int i = 0; i < this.dimY; i++) {
-//             for (int j = 0; j < this.dimX; j++) {
-//                 if (puzzle.get(i).get(j) != 0) {
-//                     fullCost += calculateCost(j, i, puzzle.get(i).get(j));
-//                 }
-//             }
-//         }
-//         return fullCost;
-//     }
-
-//     private int calculateCost(int x, int y, int number) {
-//         int i = 0;
-//         int j;
-//         for (ArrayList<Integer> row : this.puzzleModel) {
-//             if (row.contains(number)) {
-//                 i = this.puzzleModel.indexOf(row);
-//             }
-//         }
-//         j = this.puzzleModel.get(i).indexOf(number);
-//         return Math.abs(i - y) + Math.abs(j - x);
-//     }
 
     protected void configure() {
         this.dimX = puzzleMatrix[0].length;
@@ -109,13 +88,13 @@ public class Puzzle {
         return true;
     }
 
-    public ArrayList<Integer> locateNumber(int[][] puzzle, int number) {
-        ArrayList<Integer> localization = new ArrayList<>();
-        for (int i = 0; i < getMatrix().length; i++) {
-        	for (int j = 0; j < getMatrix()[i].length; j++) {
+    public static int[] locateNumber(int[][] puzzle, int number) {
+        int[] localization = new int[2];
+        for (int i = 0; i < puzzle.length; i++) {
+        	for (int j = 0; j < puzzle[i].length; j++) {
         		if (puzzle[i][j] == number) {
-        			localization.add(j);
-        			localization.add(i);
+        			localization[0] = j;
+        			localization[1] = i;
         		}
         	}
         }
@@ -148,16 +127,16 @@ public class Puzzle {
 
     public Puzzle makeMove(Puzzle originalPuzzle, String move) {
         Puzzle puzzle = makeCopyOfPuzzle(originalPuzzle);
-        ArrayList<Integer> coords = puzzle.locateNumber(puzzle.getMatrix(), 0);
+        int[] coords = puzzle.locateNumber(puzzle.getMatrix(), 0);
         //System.out.println(coords.toString());
         if (move == "R") {
-            puzzle.swap(coords.get(0), coords.get(1), coords.get(0) + 1, coords.get(1));
+            puzzle.swap(coords[0], coords[1], coords[0] + 1, coords[1]);
         } else if (move == "L") {
-            puzzle.swap(coords.get(0), coords.get(1), coords.get(0) - 1, coords.get(1));
+            puzzle.swap(coords[0], coords[1], coords[0] - 1, coords[1]);
         } else if (move == "U") {
-            puzzle.swap(coords.get(0), coords.get(1), coords.get(0), coords.get(1) - 1);
+            puzzle.swap(coords[0], coords[1], coords[0], coords[1] - 1);
         } else if (move == "D") {
-            puzzle.swap(coords.get(0), coords.get(1), coords.get(0), coords.get(1) + 1);
+            puzzle.swap(coords[0], coords[1], coords[0], coords[1] + 1);
         }
         puzzle.path += move;
         return puzzle;
@@ -229,18 +208,18 @@ public class Puzzle {
 
     public ArrayList<String> showPossibleMoves() {
         ArrayList<String> moves = new ArrayList<>();
-        ArrayList<Integer> coords = locateNumber(puzzleMatrix, 0);
+        int[] coords = locateNumber(puzzleMatrix, 0);
         for (String move : this.order) {
-        	if (move == "R" && coords.get(0) < dimX-1) {
+        	if (move == "R" && coords[0] < dimX-1) {
 	            moves.add("R");
 	        }
-	        if (coords.get(0) > 0 && move == "L") {
+	        if (coords[0] > 0 && move == "L") {
 	            moves.add("L");
 	        }
-	        if (move == "D" && coords.get(1) < dimY-1) {
+	        if (move == "D" && coords[1] < dimY-1) {
 	            moves.add("D");
 	        }
-	        if (coords.get(1) > 0 && move == "U") {
+	        if (coords[1] > 0 && move == "U") {
 	            moves.add("U");
 	        }
         }
