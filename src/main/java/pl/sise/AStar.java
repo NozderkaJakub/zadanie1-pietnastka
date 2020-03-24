@@ -1,21 +1,33 @@
 package pl.sise;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 import pl.sise.metrics.HammingMetric;
 import pl.sise.metrics.ManhattanMetric;
 
 public class AStar {
-	ArrayList<Puzzle> puzzles;
+	ArrayList<String> puzzles;
+	static ArrayList<String> order = new ArrayList<String>(Arrays.asList("L", "D", "R", "U"));
+	final int dimX;
+	final int dimY;
+	Set<Integer> visited;
 	
 	public AStar(Puzzle puzzles) {
-		this.puzzles = new ArrayList<Puzzle>();
-		this.puzzles.add(puzzles);
+		this.puzzles = new ArrayList<String>();
+		this.puzzles.add(puzzles.getAsString());
+		this.dimX = puzzles.getDimX();
+		this.dimY = puzzles.getDimY();
+		visited = new HashSet<Integer>();
+		visited.add(puzzles.hashCode());
 	}
 	
-	public void solve() {
+	public void solve() throws InterruptedException {
 		boolean isSolved = false;
 		long i = 0;
 		String previousMove = "";
@@ -27,21 +39,29 @@ public class AStar {
 			if (i > 3) {
 				queueMove = previousMoves.poll();
 			}
-			for (String move : puzzles.get(puzzles.size() - 1).showPossibleMoves()) {
-				Puzzle newPuzzle = new Puzzle(puzzles.get(puzzles.size() - 1));
+			String s = puzzles.get(puzzles.size() - 1);
+			Puzzle puzzle = new Puzzle(s, order, dimX, dimY);
+			for (String move : puzzle.showPossibleMoves()) {
+				Puzzle newPuzzle = new Puzzle(puzzle);
 				newPuzzle.makeMove(move);
 				int metricDistance = HammingMetric.calculate(newPuzzle);
-				if (metricDistance < distance && move != previousMove && move != queueMove) {
+				if(visited.contains(newPuzzle.hashCode())) continue;
+				if (metricDistance < distance) {
 					distance = metricDistance;
 					moveToMake = move;
 					previousMove = reverseMove(move);
+					//System.out.println("chuj");
 				}
 			}
 			previousMoves.add(moveToMake);
-			Puzzle newPuzzle = new Puzzle(puzzles.get(puzzles.size() - 1));
+			//if(reverseMove(moveToMake) == previousMove) continue;
+			String s2 = puzzles.get(puzzles.size() - 1);
+			Puzzle newPuzzle = new Puzzle(s2, order, dimX, dimY);
 			newPuzzle.makeMove(moveToMake);
-			newPuzzle.showFormattedPuzzle();
-			puzzles.add(newPuzzle);
+			//newPuzzle.showFormattedPuzzle();
+			//TimeUnit.SECONDS.sleep(1);
+			puzzles.add(newPuzzle.getAsString());
+			visited.add(newPuzzle.hashCode());
 			if (newPuzzle.isSolved()) {
 				isSolved = true;
 				System.out.println("SOLVED");

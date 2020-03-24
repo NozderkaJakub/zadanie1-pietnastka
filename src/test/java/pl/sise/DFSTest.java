@@ -18,14 +18,14 @@ public class DFSTest {
         
     @Test
     public void test() throws FileNotFoundException, IOException, InterruptedException {
-    //     Puzzle puzzle = new Puzzle();
-    //     puzzle.setOrder(new ArrayList<String>(Arrays.asList("R", "U", "D", "L")));
-    //     DFS dfs = new DFS(puzzle, new ArrayList<String>(Arrays.asList("R", "U", "D", "L")));
-    //     System.out.println("Przed: ");
-    //     puzzle.showFormattedPuzzle();
-    //     SolvingInfo info = dfs.solvePuzzle();
-    //     System.out.println("Po: ");
-    //     System.out.println(info.getUsedAlgorithm());
+        // Puzzle puzzle = new Puzzle();
+        // puzzle.setOrder(new ArrayList<String>(Arrays.asList("D", "U", "R", "L")));
+        // DFS dfs = new DFS(puzzle, new ArrayList<String>(Arrays.asList("D", "U", "R", "L")));
+        // System.out.println("Przed: ");
+        // puzzle.showFormattedPuzzle();
+        // SolvingInfo info = dfs.solvePuzzle();
+        // System.out.println("Po: ");
+        // System.out.println(info.getUsedAlgorithm());
     }
 }
     

@@ -24,6 +24,47 @@ public class Puzzle {
         configure();
     }
 
+    public String getAsString() {
+        String toRet = "";
+        for(int[] row : puzzleMatrix) {
+            for(int val : row) {
+                String c = "";
+                if(val >= 10) {
+                    int temp = val + 55;
+                    c = Character.toString((char) temp);
+                }
+                else {
+                    c = Integer.toString(val);
+                }
+                toRet += c;
+            }
+        }
+        return toRet;
+    }
+
+    public Puzzle(String arrayAsString, ArrayList<String> order, int dimX, int dimY) {
+        this.dimX = dimX;
+        this.dimY = dimY;
+        puzzleMatrix = new int[dimX][dimY];
+        int strIt = 0;
+        for (int i = 0; i < puzzleMatrix.length; i++) {
+        	for (int j = 0; j < puzzleMatrix[i].length; j++) {
+                char c = arrayAsString.charAt(strIt);
+                int val = 0;
+                String s = "" + c;
+                if(Character.isDigit(c)) val = Integer.parseInt(s);
+                else {
+                    int temp = (int) c;
+                    val = temp - 55;
+                }
+                puzzleMatrix[i][j] = val;
+                strIt++;
+        	}
+        }
+        this.order = order;
+        configure();
+    }
+
     public Puzzle(int[][] puzzleMatrix, ArrayList<String> order) {
         this.puzzleMatrix = puzzleMatrix;
         this.order = order;
@@ -31,13 +72,7 @@ public class Puzzle {
     }
 
     public Puzzle(Puzzle puzzle) {
-<<<<<<< HEAD
-        this.dimX = puzzle.getDimX();
-        this.dimY = puzzle.getDimY();
-    	this.puzzleMatrix = new int [getDimY()][getDimX()];
-=======
     	this.puzzleMatrix = new int [puzzle.getDimY()][puzzle.getDimX()];
->>>>>>> d0c01ba9ad9be27f2d4ce12ed7cb52e99b98bda1
         this.puzzleMatrix = makeCopyOfPuzzle(puzzle).getMatrix();
         this.order = puzzle.order;
         configure();

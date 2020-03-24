@@ -3,40 +3,42 @@ package pl.sise;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.Queue;
-import java.util.Scanner;
 import java.util.Set;
 import java.util.Stack;
-import java.util.concurrent.TimeUnit;
 
 public class DFS {
-    Stack<Puzzle> puzzles;
+    Stack<String> puzzles;
     ArrayList<String> order;
     int depthLimit = 50;
     Set<Integer> visited;
     int numberOfRecursion = 0;
     int currentLevel = 0;
+    final int dimX;
+    final int dimY;
+    SolvingInfo info;
 
     public DFS(Puzzle startingPuzzle, ArrayList<String> order) {
-    	puzzles = new Stack<Puzzle>();
+        this.dimX = startingPuzzle.getDimX();
+        this.dimY = startingPuzzle.getDimY();
+    	puzzles = new Stack<String>();
         this.order = order;
         startingPuzzle.setOrder(order);
-        puzzles.push(startingPuzzle);
+        puzzles.push(startingPuzzle.getAsString());
         visited = new HashSet<Integer>();
         visited.add(startingPuzzle.hashCode());
+        info = new SolvingInfo();
     }
 
     public SolvingInfo solvePuzzle() throws IOException, InterruptedException {
-        SolvingInfo info = new SolvingInfo();
         //Scanner input = new Scanner(System.in);
         while (!puzzles.isEmpty()) {
-            Puzzle puzzle = puzzles.pop();
+            String s = puzzles.pop();
+            Puzzle puzzle = new Puzzle(s, order, dimX, dimY);
            // System.out.println(visited.size());
                 for(int i = 0; i < order.size(); i++) {
                     String move2 = order.get(i);
-                    System.out.println(puzzle.showPossibleMoves());
-                    puzzle.showFormattedPuzzle();
+                  //  System.out.println(puzzle.showPossibleMoves());
+                   // puzzle.showFormattedPuzzle();
                     if(puzzle.showPossibleMoves().contains(move2)) {
                         Puzzle p = new Puzzle(puzzle);
                         p.makeMove(move2);
@@ -45,9 +47,10 @@ public class DFS {
                         }
                        // p.showFormattedPuzzle();
                        // System.out.println(p.hashCode());
-                        puzzles.push(p);
+                        puzzles.push(p.getAsString());
                         visited.add(p.hashCode());
                         if (p.isSolved()) {
+                            p.showFormattedPuzzle();
                             info.setUsedAlgorithm("SOLVED");
                             System.out.println("SOLVED");
                             return info;
@@ -59,17 +62,22 @@ public class DFS {
          //   System.out.println(currentLevel);
             if(currentLevel > depthLimit) {
                 Puzzle last;
+                boolean doIterate = true;
                 for(int i = 0; i < puzzles.size(); i++) {
-                    last = puzzles.pop();
+                    if(!doIterate) break;
+                    String s2 = puzzles.pop();
+                    last = new Puzzle(s2, order, dimX, dimY);
                     currentLevel--;
                     for(String move3 : last.showPossibleMoves()) {
                         Puzzle p = new Puzzle(last);
                         p.makeMove(move3);
                         if(!visited.contains(p.hashCode())) {
-                            puzzles.push(p);
+                            puzzles.push(p.getAsString());
                             numberOfRecursion++;
+                            doIterate = false;
+                            break;
                           //  System.out.println(numberOfRecursion);
-                            solvePuzzle();
+                           // solvePuzzle();
                         }
                     }
                 }

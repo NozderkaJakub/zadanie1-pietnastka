@@ -18,7 +18,7 @@ public class PuzzleTest {
     @Test
     public void testSwap() throws FileNotFoundException {
       //String starting_file = "4.txt";
-        // Puzzle puzzle = new Puzzle();
+        // 
         // ArrayList<String> order = new ArrayList<String>(Arrays.asList("R", "L", "D", "U"));
         // puzzle.setOrder(order);
         // puzzle.showFormattedPuzzle();  
@@ -30,6 +30,17 @@ public class PuzzleTest {
 //        String starting_file = "4.txt";
 //        Puzzle puzzle = new Puzzle(starting_file);
 //       // System.out.println(puzzle.isSolved());
+    }
+
+    @Test
+    public void puzzleAsStringTest() throws FileNotFoundException {
+        Puzzle puzzle = new Puzzle();
+        String s = puzzle.getAsString();
+        ArrayList<String> order = new ArrayList<String>(Arrays.asList("R", "L", "D", "U"));
+        Puzzle p2 = new Puzzle(s, order, 4, 4);
+        p2.showFormattedPuzzle();
+        System.out.println(puzzle.hashCode());
+        System.out.println(p2.hashCode());
     }
 }
     
