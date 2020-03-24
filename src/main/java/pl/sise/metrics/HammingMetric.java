@@ -3,7 +3,7 @@ package pl.sise.metrics;
 
 import pl.sise.Puzzle;
 
-public class HammingMetric {
+public class HammingMetric implements Metrics {
 	public static int calculate (Puzzle puzzle) {
 		int sum = 0;
 		for (int i = 0; i < puzzle.getDimY(); i++) {

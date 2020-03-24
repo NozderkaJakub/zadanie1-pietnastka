@@ -20,7 +20,6 @@ public class Puzzle {
     String path = "";
 
     public Puzzle() throws FileNotFoundException {
-        this.readData(starting_file);
         configure();
     }
 
@@ -204,21 +203,6 @@ public class Puzzle {
             }
         }
         return puzzleModel;
-    }
-
-    public void readData(String starting_file) throws FileNotFoundException {
-        Scanner fileRead = new Scanner(new File(starting_file));
-        String[] dims = fileRead.nextLine().split(" ");
-        this.dimX = Integer.parseInt(dims[0]);
-        this.dimY = Integer.parseInt(dims[1]);
-        this.puzzleMatrix = new int[getDimY()][getDimX()];
-        for (int i = 0; i < this.dimY; i++){
-            String[] line = fileRead.nextLine().split(" ");
-            for (int j = 0; j < this.dimX; j++) {
-                this.puzzleMatrix[i][j] = Integer.parseInt(line[j]);
-            }
-        }
-        fileRead.close();
     }
 
     public void showFormattedPuzzle() {

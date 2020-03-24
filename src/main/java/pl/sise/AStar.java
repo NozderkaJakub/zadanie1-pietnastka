@@ -6,7 +6,6 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
 import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
 import pl.sise.metrics.HammingMetric;
 import pl.sise.metrics.ManhattanMetric;
@@ -29,28 +28,20 @@ public class AStar {
 	
 	public void solve() throws InterruptedException {
 		boolean isSolved = false;
-		long i = 0;
-		String previousMove = "";
 		Queue<String> previousMoves = new LinkedList<String>();
 		while (!isSolved) {
 			int distance = 10000;
 			String moveToMake = "";
-			String queueMove = "";
-			if (i > 3) {
-				queueMove = previousMoves.poll();
-			}
 			String s = puzzles.get(puzzles.size() - 1);
 			Puzzle puzzle = new Puzzle(s, order, dimX, dimY);
 			for (String move : puzzle.showPossibleMoves()) {
 				Puzzle newPuzzle = new Puzzle(puzzle);
 				newPuzzle.makeMove(move);
-				int metricDistance = HammingMetric.calculate(newPuzzle);
+				int metricDistance = ManhattanMetric.calculate(newPuzzle);
 				if(visited.contains(newPuzzle.hashCode())) continue;
 				if (metricDistance < distance) {
 					distance = metricDistance;
 					moveToMake = move;
-					previousMove = reverseMove(move);
-					//System.out.println("chuj");
 				}
 			}
 			previousMoves.add(moveToMake);
@@ -64,9 +55,8 @@ public class AStar {
 			visited.add(newPuzzle.hashCode());
 			if (newPuzzle.isSolved()) {
 				isSolved = true;
-				System.out.println("SOLVED");
+//				System.out.println("SOLVED");
 			}
-			i += 1;
 		}
 	}
 	

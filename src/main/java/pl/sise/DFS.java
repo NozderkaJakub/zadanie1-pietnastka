@@ -50,9 +50,9 @@ public class DFS {
                         puzzles.push(p.getAsString());
                         visited.add(p.hashCode());
                         if (p.isSolved()) {
-                            p.showFormattedPuzzle();
+//                            p.showFormattedPuzzle();
                             info.setUsedAlgorithm("SOLVED");
-                            System.out.println("SOLVED");
+//                            System.out.println("SOLVED");
                             return info;
                         }
                         currentLevel++;
